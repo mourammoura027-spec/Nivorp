@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Nivora RP Store</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#000;
+color:#fff;
+}
+
+.bg{
+position:fixed;
+inset:0;
+background:url('https://i.imgur.com/8Z7X8ZL.jpeg') center/cover no-repeat;
+filter:brightness(.2);
+z-index:-1;
+}
+
+.container{max-width:1000px;margin:auto;padding:20px}
+
+.title{
+text-align:center;
+font-size:50px;
+font-weight:900;
+text-shadow:0 0 15px #ff00ff,0 0 20px #00ffff;
+}
+
+.box{
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.1);
+border-radius:15px;
+padding:15px;
+margin-bottom:15px;
+backdrop-filter:blur(10px);
+}
+
+.btn{
+padding:10px;
+border-radius:10px;
+font-weight:800;
+cursor:pointer;
+display:block;
+margin:5px;
+text-align:center;
+color:#000;
+border:none;
+}
+
+.neon{background:linear-gradient(90deg,#ff00ff,#00ffff)}
+.gold{background:gold}
+.green{background:#25d366}
+.red{background:#ff3b3b;color:#fff}
+
+.cart{
+position:fixed;
+right:10px;
+top:10px;
+background:#111;
+padding:10px;
+border:1px solid #333;
+border-radius:10px;
+width:180px;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:10px;
+border:none;
+background:#111;
+color:#fff;
+text-align:center;
+margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="cart">
+🛒 Carrinho<br>
+Total: R$ <span id="total">0</span><br>
+<button class="btn neon" onclick="finalizar()">Finalizar</button>
+</div>
+
+<div class="container">
+
+<h1 class="title">NIVORA RP STORE</h1>
+
+<div class="box">
+<h3>💵 CASH</h3>
+<button class="btn neon" onclick="add('Cash',10)">Adicionar R$10</button>
+</div>
+
+<div class="box">
+<h3>🪙 COINS</h3>
+<button class="btn neon" onclick="add('Coins',100)">Adicionar R$100</button>
+</div>
+
+<div class="box">
+<h3>👑 VIP 7 DIAS</h3>
+<button class="btn gold" onclick="add('VIP 7 DIAS',20)">R$20</button>
+</div>
+
+<div class="box">
+<h3>👑 VIP 1 MÊS</h3>
+<button class="btn gold" onclick="add('VIP 1 MÊS',50)">R$50</button>
+</div>
+
+<div class="box">
+<h3>👑 VIP 3 MESES</h3>
+<button class="btn gold" onclick="add('VIP 3 MESES',120)">R$120</button>
+</div>
+
+<div class="box">
+<h3>👤 VENDEDOR</h3>
+<button class="btn green" onclick="seller='anjo'">7AnjoX</button>
+<button class="btn green" onclick="seller='biel'">7BielX</button>
+</div>
+
+<div class="box">
+<h3>🎟 CUPOM</h3>
+<input id="cupom" placeholder="Digite cupom">
+<button class="btn neon" onclick="aplicarCupom()">Aplicar Cupom</button>
+</div>
+
+</div>
+
+<script>
+
+let cart=[];
+let total=0;
+let seller="biel";
+let desconto=0;
+let usado=false;
+
+const cupons = {
+NIVORA10:10,
+RPSTART:10,
+BEMVINDO:15,
+ANJO20:20,
+BIEL20:20,
+DROP30:30,
+HYPE30:30,
+DROP50:50,
+GODMODE:75
+};
+
+function add(item,price){
+cart.push({item,price});
+total+=price;
+document.getElementById("total").innerText=total;
+}
+
+function aplicarCupom(){
+
+if(usado){
+alert("Cupom já usado");
+return;
+}
+
+let c=document.getElementById("cupom").value.toUpperCase();
+
+if(!cupons[c]){
+alert("Cupom inválido ❌");
+return;
+}
+
+desconto=cupons[c];
+usado=true;
+
+alert("🔥 Desconto aplicado: "+desconto+"%");
+
+}
+
+function finalizar(){
+
+if(cart.length===0)return;
+
+let valorFinal = total - (total * desconto / 100);
+
+let msg="🛒 COMPRA NIVORA RP%0A%0A";
+
+cart.forEach(i=>{
+msg+=`- ${i.item} R$${i.price}%0A`;
+});
+
+msg+=`%0A💰 Total: R$${valorFinal.toFixed(2)}`;
+msg+=`%0A👤 Vendedor: ${seller}`;
+
+let link = seller==="biel"
+? "https://wa.me/5534991116468?text="
+: "https://wa.me/5544991148268?text=";
+
+window.open(link+encodeURIComponent(msg),"blank");
+
+cart=[];
+total=0;
+desconto=0;
+usado=false;
+document.getElementById("total").innerText=0;
+}
+
+</script>
+
+</body>
+</html>
